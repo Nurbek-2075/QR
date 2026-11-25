@@ -130,3 +130,22 @@ const SUPABASE_KEY = 'YOUR_ANON_PUBLIC_KEY';
 - Отдельного списка мероприятий или расписания занятий нет. Процент посещаемости рассчитывается по датам, когда в базе есть хотя бы одна отметка.
 - SQL-схема не заполняет `owner_email` у старых записей, поскольку их прежнего администратора нельзя определить автоматически.
 - Автоматические тесты в проекте не добавлены.
+
+
+## Рабочая настройка (Supabase)
+
+- Сайт: https://nurbek-2075.github.io/QR/
+- Режим: Supabase (`LOCAL_MODE = false`). Демо-аккаунты из раздела выше больше не работают.
+- Главный администратор: логин `admin` (служебный адрес `admin@attendance.local`).
+- Пароль администратора в репозитории не хранится: он задан в Supabase (Authentication → Users). Сменить или сбросить его можно там же.
+- Полная схема базы: [supabase_schema.sql](./supabase_schema.sql). Выполняется один раз в Supabase SQL Editor.
+
+Запись главного администратора в базе:
+
+```sql
+insert into public.allowed_admins(email, is_main)
+values ('admin@attendance.local', true)
+on conflict (email) do update set is_main = true;
+```
+
+Новый администратор: сначала создайте пользователя в Supabase (Authentication → Users → Add user, email вида `логин@attendance.local`, включите Auto confirm), затем добавьте его логин в разделе «Администраторы» на сайте.
