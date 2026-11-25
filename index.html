@@ -245,7 +245,7 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 const iso = d => d.toLocaleDateString('sv');
 let timer = null, ME = null, box = null;
 const must = ({data,error}) => { if(error) throw error; return data; };
-const visibleParticipants = rows => ME?.is_main ? rows : rows.filter(p=>String(p.owner_email||'').toLowerCase()===String(ME?.email||'').toLowerCase());
+const visibleParticipants = rows => rows;
 const showError = e => { console.error(e); const m = $('#msg'); if(m) { m.textContent = e.message || 'Произошла ошибка. Проверьте настройки Supabase.'; m.className = m.closest('.login-screen') ? 'login-error visible' : 'msg error'; } else alert(e.message || 'Произошла ошибка.'); };
 async function signOutToEntry(){try{await sb.auth.signOut();entryView()}catch(e){showError(e)}}
 const themeKey = 'qr-attendance-theme';
