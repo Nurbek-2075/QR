@@ -172,7 +172,7 @@ body:has(.narrow.login-screen) .theme-toggle:focus-visible{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 // Сейчас включён локальный режим. Для Supabase позже поменяйте LOCAL_MODE на false.
-const LOCAL_MODE = true;
+const LOCAL_MODE = false;
 // Удалить перед запуском в рабочей среде.
 const LOGIN_DOMAIN = '@attendance.local';
 const LOGIN_PATTERN = /^[a-z0-9._]{3,}$/i;
@@ -182,12 +182,12 @@ const loginFormatHint = 'Только латинские буквы, цифры,
 function toEmail(login){return normalizeLogin(login)+LOGIN_DOMAIN}
 function toLogin(email){const value=String(email??'').trim().toLowerCase();return value.endsWith(LOGIN_DOMAIN)?value.slice(0,-LOGIN_DOMAIN.length):value}
 // удалить перед запуском: демо-учётные данные локального режима
-const LOCAL_DEMO_CREDENTIALS = {admin:{email:'admin@attendance.local',password:'QRadmin-2026!'},participant:{email:'student@attendance.local',password:'Student-2026!'},developer:{email:'developer@attendance.local',password:'Dev-2026!'}};
+const LOCAL_DEMO_CREDENTIALS = {admin:{email:'admin@attendance.local',password:''},participant:{email:'student@attendance.local',password:''},developer:{email:'developer@attendance.local',password:''}};
 const ADMIN_DISPLAY_NAMES = {developer:'Разработчик'};
 const adminDisplayName = email => ADMIN_DISPLAY_NAMES[toLogin(email)] || toLogin(email);
 // Когда будете подключать Supabase, вставьте значения из Project Settings -> API.
-const SUPABASE_URL = 'https://your-project.supabase.co';
-const SUPABASE_KEY = 'YOUR_ANON_PUBLIC_KEY';
+const SUPABASE_URL = 'https://zigdqbqxrlzaehwhufqh.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InppZ2RxYnF4cmx6YWVod2h1ZnFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1OTg3NjYsImV4cCI6MjExMTE3NDc2Nn0.lOeJYYoPhkCKCCZwS_J909R_hN09ANJzD5zVEe1yJM0';
 const SUPABASE_CONFIGURED = SUPABASE_URL !== 'https://your-project.supabase.co' && SUPABASE_KEY !== 'YOUR_ANON_PUBLIC_KEY';
 const localStorageKey = 'qr-attendance-local-v1';
 const localNow = () => new Date().toISOString();
