@@ -3,6 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#10213e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Посещаемость">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0AQMAAAAHA5RxAAAABlBMVEX/wiIQIT6JlWU1AAABFUlEQVR42u2VMW7DMAxFHx0DyVaP3ZKb2CcrsvRezk0ydnS3BHD9O1BqG9txM0QogkqAAOKZIgnS+jIxt94L5lfmmWf+6PxsZjvgYGbhgyTpCKwlAdSS1C3HOQI9KNp3r79WD2Be2jdv3CigStI32d51sLzkAy0A3fA//p+CBoCquOQm789TnyZvy+DtpnMQ5nAwVoAMtgny7jyTRfu6v9+XE7CV1EbQWX5PM0+u27Y5W/ODv/kW/ekmHQ66na7+oNsT3owP3hj/o/rFv4y6/TIbJ+r2fPyr91171P7p3EtGhVrdTvyn72/U7XEck16X8q66u+j2JG/Q7VR92006tez/7NsoN2Hufnqtr4Yq60/mmT86/wSuAF2TB5AP4QAAAABJRU5ErkJggg==">
 <title>Учёт посещаемости</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -462,6 +468,10 @@ boot();
 (function(){var a=document.getElementById('app');if(!a||!window.MutationObserver)return;
 function lab(){a.querySelectorAll('table.data-table').forEach(function(t){var h=[].map.call(t.querySelectorAll('thead th'),function(x){return x.textContent.trim()});t.querySelectorAll('tbody tr').forEach(function(r){[].forEach.call(r.children,function(c,i){if(h[i]&&c.getAttribute('data-label')!==h[i])c.setAttribute('data-label',h[i])})})})}
 new MutationObserver(lab).observe(a,{childList:true,subtree:true});lab()})();
+</script>
+<script>
+/* PWA: регистрация минимального service worker (только по https) */
+if("serviceWorker" in navigator&&location.protocol==="https:"){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
 </script>
 </body>
 </html>
