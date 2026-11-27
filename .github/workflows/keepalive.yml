@@ -1,0 +1,14 @@
+name: Supabase keepalive
+on:
+  schedule:
+    - cron: '17 4 */3 * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase API
+        run: |
+          curl -fsS -o /dev/null -w "HTTP %{http_code}\n" \
+            -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InppZ2RxYnF4cmx6YWVod2h1ZnFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1OTg3NjYsImV4cCI6MjExMTE3NDc2Nn0.lOeJYYoPhkCKCCZwS_J909R_hN09ANJzD5zVEe1yJM0" \
+            "https://zigdqbqxrlzaehwhufqh.supabase.co/rest/v1/participants?select=id&limit=1" || true
