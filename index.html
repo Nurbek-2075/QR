@@ -408,7 +408,7 @@ async function exportAll(){
   try{
     const [ps,cs]=await Promise.all([fetchAll(()=>sb.from('participants').select('id,name,email,created_at,owner_email').order('name')),fetchAll(()=>sb.from('checkins').select('day,created_at,participant_id,admin_email').order('day',{ascending:false}))]);
     const owned=visibleParticipants(ps),ids=new Set(owned.map(p=>p.id)),filtered=cs.filter(c=>ids.has(c.participant_id)),names=new Map(owned.map(p=>[p.id,p.name]));
-    exportXlsx('otchetnost-poseshchaemosti',{Участники:owned.map(p=>({Имя:p.name,Логин:toLogin(p.email),Администратор:toLogin(p.owner_email||''),Добавлен:p.created_at})),Посещения:filtered.map(c=>({Дата:c.day,Участник:names.get(c.participant_id)||'',Время:c.created_at,Администратор:toLogin(c.admin_email||'')}))})
+    const dayTotal=new Set(filtered.map(c=>c.day)).size,sum=owned.map(p=>{const mine=filtered.filter(c=>c.participant_id===p.id);return{Участник:p.name,Логин:toLogin(p.email),Посещений:mine.length,'Всего дней с отметками':dayTotal,'Процент, %':dayTotal?Math.round(new Set(mine.map(c=>c.day)).size*100/dayTotal):0,'Последнее посещение':mine.map(c=>c.day).sort().at(-1)||''}});exportXlsx('otchetnost-poseshchaemosti',{Сводка:sum,Участники:owned.map(p=>({Имя:p.name,Логин:toLogin(p.email),Администратор:toLogin(p.owner_email||''),Добавлен:p.created_at})),Посещения:filtered.map(c=>({Дата:c.day,Участник:names.get(c.participant_id)||'',Время:c.created_at,Администратор:toLogin(c.admin_email||'')}))})
   }catch(e){showError(e)}
 }
 
