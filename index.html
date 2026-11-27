@@ -163,6 +163,51 @@ body:has(.narrow.login-screen) .theme-toggle:focus-visible{
 :root[data-theme="dark"] .login-screen .outlined-label{
   background:#12234a;
 }
+
+/* === UI patch: полноэкранный QR и адаптивность === */
+.app-main{min-width:0;width:100%;max-width:100%;justify-self:stretch;margin-left:0;margin-right:0}
+.qrwrap{--qr-size:min(280px,calc(100vw - 96px))}
+.qrbox canvas,.qrbox img{width:var(--qr-size)!important;height:auto!important;max-width:100%!important;margin:0 auto}
+.qr-close{display:none}
+.app-main .qrwrap.fullscreen-qr,.qrwrap.fullscreen-qr{position:fixed;inset:0;z-index:1000;width:100%;height:100vh;height:100dvh;max-width:none;margin:0;padding:24px 16px;border:0;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:auto;background:#fff!important;color:#10213e!important;--qr-size:min(calc(100vw - 72px),calc(100dvh - 270px),620px)}
+.fullscreen-qr .qrbox{padding:16px;box-shadow:0 6px 30px #10213e18}
+.fullscreen-qr h2{font-size:clamp(20px,4vmin,30px);margin:18px 0 6px;text-align:center}
+.fullscreen-qr .qr-timer{font-size:clamp(34px,8vmin,52px);line-height:1.1}
+.fullscreen-qr .progress{display:block;width:min(360px,70vw);margin:12px auto 0}
+.fullscreen-qr .qr-valid-label,.fullscreen-qr #qr-message,.fullscreen-qr .qr-actions{display:none}
+.fullscreen-qr .qr-close{display:inline-flex;align-items:center;gap:6px;position:absolute;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:2;min-height:44px;padding:8px 18px;border:0;border-radius:999px;background:#10213e;color:#fff;font-weight:700;box-shadow:0 4px 14px #10213e33}
+@media (orientation:landscape) and (max-height:540px){
+ .app-main .qrwrap.fullscreen-qr,.qrwrap.fullscreen-qr{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:1fr auto auto auto 1fr;align-items:center;justify-items:center;column-gap:32px;padding:12px 20px;--qr-size:min(calc(100dvh - 72px),48vw)}
+ .fullscreen-qr .qrbox{grid-column:1;grid-row:1 / span 5}
+ .fullscreen-qr h2{grid-column:2;grid-row:2;margin:0 0 4px}
+ .fullscreen-qr .qr-timer{grid-column:2;grid-row:3}
+ .fullscreen-qr .progress{grid-column:2;grid-row:4}
+}
+main.narrow:not(.entry-screen):not(.login-screen):not(.result){margin:max(24px,10vh) auto 24px;width:calc(100% - 32px);max-width:460px;padding:30px 24px}
+main.narrow:not(.entry-screen):not(.login-screen):not(.result) button{width:100%;min-height:48px;margin-top:16px}
+@media(max-width:700px){
+ .app-shell{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);align-content:start}
+ .side-nav{max-width:100vw;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+ .side-nav::-webkit-scrollbar{display:none}
+ .app-main{padding:14px 12px 40px;width:100%;max-width:100%;justify-self:stretch;margin-left:0;margin-right:0}
+ .app-main>header,#box{max-width:100%}
+ .app-main>header{gap:8px}
+ .actions{flex-wrap:wrap}
+ .table-wrap{overflow:visible}
+ .data-table{display:block;min-width:0!important;border:0!important;box-shadow:none!important;background:transparent!important}
+ .data-table thead{display:none}
+ .data-table tbody{display:block}
+ .data-table tr{display:block;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 14px;margin:0 0 10px}
+ .data-table td{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0!important;padding:6px 0!important;text-align:right;width:auto!important}
+ .data-table td::before{content:attr(data-label);color:var(--mute);font-size:12px;font-weight:700;text-align:left;flex:0 0 auto}
+ .data-table td:first-child{display:block;text-align:left}
+ .data-table td:first-child::before{display:none}
+ .data-table td .actions{justify-content:flex-end}
+ .theme-toggle{width:46px!important;height:46px!important;right:14px!important;bottom:14px!important;top:auto!important}
+ .theme-toggle:before{display:none}
+ .theme-toggle svg{width:22px!important;height:22px!important}
+ body:has(.narrow.entry-screen) .theme-toggle,body:has(.narrow.login-screen) .theme-toggle{top:12px!important;bottom:auto!important;right:12px!important}
+}
 </style>
 </head>
 <body>
@@ -372,7 +417,7 @@ const tabs={
     const chart=hasWeekData?`<div class="legend"><span><i style="background:#10213e"></i>Пришли</span><span><i style="background:#ffc222"></i>Опоздали</span></div><svg class="chart" viewBox="0 0 700 250" preserveAspectRatio="none" role="img" aria-label="График посещаемости за неделю">${Array.from({length:5},(_,i)=>{const value=step*i,py=y(value);return `<g><line class="grid" x1="68" y1="${py}" x2="680" y2="${py}"/><text x="6" y="${py+4}">${value}</text></g>`}).join('')}<polyline class="arrived" points="${series('arrived')}"/><polyline class="late-line" points="${series('late')}"/>${counts.map((v,i)=>`<circle class="arrived" cx="${x(i)}" cy="${y(v.arrived)}" r="3.5"/><circle class="late-line" cx="${x(i)}" cy="${y(v.late)}" r="3.5"/>`).join('')}${weekDays.map((day,i)=>`<text x="${x(i)}" y="238" text-anchor="middle">${new Date(day+'T12:00:00').toLocaleDateString('ru',{weekday:'short'})}</text>`).join('')}</svg>`:`<div class="chart-empty">Данных за неделю пока нет</div>`;
     box.innerHTML=`<section class="stats dashboard-stats"><div class="stat"><span>Всего участников</span><b>${ps.length}</b></div><div class="stat"><span>Пришли сегодня</span><b>${arr}</b></div><div class="stat"><span>Опоздали</span><b>${late}</b></div><div class="stat"><span>Отсутствуют</span><b>${abs}</b></div><div class="stat"><span>Процент посещаемости</span><b>${pct}%</b></div></section><section class="chart-card"><h2>Посещаемость за неделю</h2>${chart}</section><section class="card"><h2>Последние отметки</h2><div class="table-wrap"><table class="data-table"><thead><tr><th>Участник</th><th>Время</th><th>Статус</th><th>Мероприятие</th></tr></thead><tbody>${mine.slice(0,10).map(c=>{const p=ps.find(v=>v.id===c.participant_id),st=c.status||'present';return `<tr><td><span class="avatar">${(p?.name||'?').split(/\s+/).map(v=>v[0]).slice(0,2).join('')}</span>${esc(p?.name||'Участник')}</td><td>${new Date(c.created_at).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})}</td><td><span class="badge ${st==='late'?'late':'present'}">${st==='late'?'Опоздал':'Пришёл'}</span></td><td>Посещение</td></tr>`}).join('')||'<tr><td colspan="4" class="empty">Отметок пока нет.</td></tr>'}</tbody></table></div></section>`
   },
-  async qr(){box.innerHTML=`<div class="qrwrap" id="qr-panel"><div id="qrimg" class="qrbox"></div><h2>QR-код для отметки</h2><p class="muted qr-valid-label">Действителен ещё:</p><div class="qr-timer" id="qr-time">02:00</div><div class="progress"><i id="qr-progress" style="width:100%"></i></div><p class="muted" id="qr-message">Обновится через 2 минуты</p><div class="qr-actions"><button id="full-qr">На весь экран</button><button id="download-qr">Скачать QR</button></div></div>`;let endsAt=0,refreshing=false;const make=async()=>{const msg=$('#qr-message');if(msg)msg.textContent='Обновление…';try{const token=crypto.randomUUID().replace(/-/g,'').slice(0,16);must(await sb.from('qr_tokens').delete().lt('expires_at',new Date().toISOString()));must(await sb.from('qr_tokens').insert({token,admin_email:ME.email,expires_at:new Date(Date.now()+120000).toISOString()}));const img=$('#qrimg');if(!img)return;img.innerHTML='';new QRCode(img,{text:location.origin+location.pathname+'?t='+token,width:280,height:280});endsAt=Date.now()+120000;const m=$('#qr-message');if(m)m.textContent='Обновится через 2 минуты';setTimeout(()=>{const x=$('#qr-message');if(x&&x.textContent==='Обновление…')x.textContent='Обновится через 2 минуты'},1000)}catch(e){showError(e)}};await make();timer=setInterval(()=>{const left=Math.max(0,endsAt-Date.now()),sec=Math.ceil(left/1000),tm=$('#qr-time'),pr=$('#qr-progress');if(tm)tm.textContent=`${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`;if(pr)pr.style.width=`${left/1200}%`;if(left<=0&&!refreshing){refreshing=true;make().finally(()=>refreshing=false)}},1000);$('#full-qr').onclick=()=>{const p=$('#qr-panel');p.classList.add('fullscreen-qr');const onKey=e=>{if(e.key==='Escape'){p.classList.remove('fullscreen-qr');document.removeEventListener('keydown',onKey)}};document.addEventListener('keydown',onKey)};$('#download-qr').onclick=()=>{const canvas=$('#qrimg canvas');if(!canvas)return showError(new Error('QR-код ещё загружается.'));const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download='qr-poseshchenie.png';a.click()}},
+  async qr(){box.innerHTML=`<div class="qrwrap" id="qr-panel"><button type="button" id="qr-close" class="qr-close" aria-label="Закрыть полноэкранный режим">✕ Закрыть</button><div id="qrimg" class="qrbox"></div><h2>QR-код для отметки</h2><p class="muted qr-valid-label">Действителен ещё:</p><div class="qr-timer" id="qr-time">02:00</div><div class="progress"><i id="qr-progress" style="width:100%"></i></div><p class="muted" id="qr-message">Обновится через 2 минуты</p><div class="qr-actions"><button id="full-qr">На весь экран</button><button id="download-qr">Скачать QR</button></div></div>`;let endsAt=0,refreshing=false;const make=async()=>{const msg=$('#qr-message');if(msg)msg.textContent='Обновление…';try{const token=crypto.randomUUID().replace(/-/g,'').slice(0,16);must(await sb.from('qr_tokens').delete().lt('expires_at',new Date().toISOString()));must(await sb.from('qr_tokens').insert({token,admin_email:ME.email,expires_at:new Date(Date.now()+120000).toISOString()}));const img=$('#qrimg');if(!img)return;img.innerHTML='';new QRCode(img,{text:location.origin+location.pathname+'?t='+token,width:640,height:640});endsAt=Date.now()+120000;const m=$('#qr-message');if(m)m.textContent='Обновится через 2 минуты';setTimeout(()=>{const x=$('#qr-message');if(x&&x.textContent==='Обновление…')x.textContent='Обновится через 2 минуты'},1000)}catch(e){showError(e)}};await make();timer=setInterval(()=>{const left=Math.max(0,endsAt-Date.now()),sec=Math.ceil(left/1000),tm=$('#qr-time'),pr=$('#qr-progress');if(tm)tm.textContent=`${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`;if(pr)pr.style.width=`${left/1200}%`;if(left<=0&&!refreshing){refreshing=true;make().finally(()=>refreshing=false)}},1000);{const p=$('#qr-panel');let onKey=null,wake=null;const exitFs=()=>{p.classList.remove('fullscreen-qr');if(onKey){document.removeEventListener('keydown',onKey);onKey=null}document.removeEventListener('fullscreenchange',onFsChange);try{if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{})}catch(e){}try{if(wake){wake.release();wake=null}}catch(e){}};const onFsChange=()=>{if(!document.fullscreenElement&&p.classList.contains('fullscreen-qr'))exitFs()};$('#full-qr').onclick=()=>{p.classList.add('fullscreen-qr');onKey=e=>{if(e.key==='Escape')exitFs()};document.addEventListener('keydown',onKey);document.addEventListener('fullscreenchange',onFsChange);try{if(p.requestFullscreen)p.requestFullscreen({navigationUI:'hide'}).catch(()=>{})}catch(e){}try{if(navigator.wakeLock)navigator.wakeLock.request('screen').then(w=>{wake=w}).catch(()=>{})}catch(e){}};$('#qr-close').onclick=exitFs}$('#download-qr').onclick=()=>{const canvas=$('#qrimg canvas');if(!canvas)return showError(new Error('QR-код ещё загружается.'));const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download='qr-poseshchenie.png';a.click()}},
   async attendance(){const selected=$('#today-date')?.value||iso(new Date());const pq=sb.from('participants').select('id,name,email,owner_email').order('name');const [rawPs,rawCs]=await Promise.all([pq.then(must),sb.from('checkins').select('id,participant_id,created_at,status').eq('day',selected).then(must)]);const ps=visibleParticipants(rawPs),ids=new Set(ps.map(p=>p.id)),cs=rawCs.filter(c=>ids.has(c.participant_id));const m=new Map(cs.map(c=>[c.participant_id,c]));const present=cs.filter(c=>(c.status||'present')==='present').length,late=cs.filter(c=>c.status==='late').length,absent=Math.max(0,ps.length-cs.length);box.innerHTML=`<div class="actions"><h2 style="margin-right:auto">Посещаемость</h2><button id="export">Скачать Excel</button></div><div class="actions"><label>Дата <input id="today-date" type="date" value="${selected}"></label><input id="person-search" placeholder="Поиск по имени или логину"></div><div class="stats"><div class="stat"><b>${present}</b><span>Пришли</span></div><div class="stat"><b>${late}</b><span>Опоздали</span></div><div class="stat"><b>${absent}</b><span>Отсутствуют</span></div></div><div id="today-rows"></div>`;const draw=q=>{q=(q||'').toLowerCase();const rows=ps.filter(p=>(p.name+' '+toLogin(p.email)).toLowerCase().includes(q));$('#today-rows').innerHTML=rows.length?`<div class="table-wrap"><table class="data-table"><thead><tr><th>Участник</th><th>Статус</th><th>Действие</th></tr></thead><tbody>${rows.map(p=>{const c=m.get(p.id),st=c?.status||'absent';return `<tr><td><span class="avatar">${p.name.split(/\\s+/).map(x=>x[0]).slice(0,2).join('')}</span><b>${esc(p.name)}</b><br>${esc(toLogin(p.email))}</td><td><span class="badge ${st}">${st==='present'?'Пришёл':st==='late'?'Опоздал':'Отсутствует'}</span></td><td><div class="actions" style="gap:8px">${c?`<button data-remove="${c.id}">Снять отметку</button>`:`<button data-add="present" data-p="${p.id}">Пришёл</button><button data-add="late" data-p="${p.id}">Опоздал</button>`}</div></td></tr>`}).join('')}</tbody></table></div>`:'<p class="empty">Участники не найдены.</p>'};draw('');$('#today-date').onchange=()=>tabs.attendance();$('#person-search').oninput=e=>draw(e.target.value);$('#export').onclick=()=>exportAll();box.onclick=async e=>{const remove=e.target.dataset.remove,add=e.target.dataset.add,p=e.target.dataset.p;if(!remove&&!add)return;try{must(remove?await sb.from('checkins').delete().eq('id',remove):await sb.from('checkins').insert({participant_id:p,day:selected,admin_email:ME.email,status:add}));await tabs.attendance()}catch(err){showError(err)}}},
   async people(){
     const ps=visibleParticipants(must(await sb.from('participants').select('id,name,email,created_at,owner_email').order('name')));
@@ -410,6 +455,13 @@ async function boot(){
   }catch(e){showError(e)}
 }
 boot();
+</script>
+
+<script>
+/* подписи ячеек таблиц для карточного вида на телефоне */
+(function(){var a=document.getElementById('app');if(!a||!window.MutationObserver)return;
+function lab(){a.querySelectorAll('table.data-table').forEach(function(t){var h=[].map.call(t.querySelectorAll('thead th'),function(x){return x.textContent.trim()});t.querySelectorAll('tbody tr').forEach(function(r){[].forEach.call(r.children,function(c,i){if(h[i]&&c.getAttribute('data-label')!==h[i])c.setAttribute('data-label',h[i])})})})}
+new MutationObserver(lab).observe(a,{childList:true,subtree:true});lab()})();
 </script>
 </body>
 </html>
