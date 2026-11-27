@@ -1,0 +1,26 @@
+{
+ "name": "Учёт посещаемости",
+ "short_name": "Посещаемость",
+ "description": "Учёт посещаемости по QR-коду",
+ "start_url": ".",
+ "scope": ".",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#10213e",
+ "theme_color": "#10213e",
+ "lang": "ru",
+ "icons": [
+  {
+   "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADAAQMAAABoEv5EAAAABlBMVEX/wiIQIT6JlWU1AAABCUlEQVR42u2WQW6DMBBF3xCkZAc3gJu0Nwu9WY9CbsDSSITfBZiUBtJUgqqVxpsBP9ljDcbPJpZbggMHDhxsBszMAN7MrBq6JEkdwIvUAxSSpG+m6gBq6AGanZZ7lGqAg9TMwAlygBROv1/dSzqPE6j7efQNR5nM4wSKbh53SB7GndlBGHrGD9YaFMDVINsneQpQjm/54xHDP6j4VAFnSZL51cDBfxKLLG+t/ASuAK/QE8Jzmohi2XW5USx3IIply+RtvuKPuxGTN5anWj1LTBXn+g/vkuGEC9m7NcWDW8bCZaJMVnJM3vjxqo7NVmK5tS9i2bG6USzPlz2KpScLY9ldLA4cONgCfAAb+nXb0z7J8wAAAABJRU5ErkJggg==",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any maskable"
+  },
+  {
+   "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIAAQMAAADOtka5AAAABlBMVEX/wiIQIT6JlWU1AAAC1ElEQVR42u3bQXLaMBSA4fcMk7DoDCy7KzcJN8O5SY/CEXoEsuuSznThdAjqAmJJ9pOxTKImnV8bNDJ8PEs2suWHOrmtVAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAODLo76WlW98bhu1J7i4nPyWmW/d+9aHzge6Efzx1Rdf/e6rP65EcAg2bdvWoPH+SgQhsGu/JGg8XunEvVUPOiaqv8sw7qzdCcN2bx1BdxTE6vCwZ4OxMUeBsxHgwwDb/uHbHtZjAK1FRORL3Pq1f7KmgMrcsI5eBoH5JZC4dXN+WZXoxMXltY5a63gjRyLAdeCXqtb9k0x1MRI4WKedM6b2FLDvTPPttH5iGAEAAAAAACYBa+uatkq82Wpb+Uvb4PLAXwVbV8ZRWZrp+I5hBMgBmqFbnqZEBEfzyN31F7pSwEmsFat9f6ErBbjz7v6OW39G95/DffDYXY4UaZckORIBPirQXRKtownmUpqBD7z5Lmw6c2Rv/tP37sS1Va8GPlAZU3tvd3RoOu90amNuqo2heV3JvvUJRxcIvmxpxtV9v/LnQAAAAAAAAAAAAAAAAAAAAAAhV/dcnKrqRuRJVedTcnUbEZHlZZFqUq6ujF8SNXN1DyIi95fEuu2EXN2cTtwn6uWGcZfYnXIR1NJ/ZMXZCCD/T65uBmDn6mYAVd6+jc3VLdmJdq4uR+JAmY9+57OSq5sBHMZO7Vm5uv+2Exep6bdYBHdBfTYFUOfcTkTkm3NHfg8AAAA+9+zc3l0+qcyOEyII7od7N8Rl+qApPbGsxfr/WQZg5urmDOPScS7Y5d45fg9uy9UtGcFxMMt8cq5uBmDn6ub0gZmry9kI8MmAOnWzViyCTSLptVwE60R9NLBK7M7oxwNmrm7OA4q79E3uuAjMXN2TiMjDOed3Rq4uAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAvfwHa0EI/s0pvQQAAAABJRU5ErkJggg==",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}
